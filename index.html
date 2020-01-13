@@ -6,6 +6,64 @@
 </head>
 <body>
 	<script type="text/javascript">
+		// Returns a string with its first character in uppercase
+		function capitalize(str) {
+			return str && (str[0].toUpperCase() + str.slice(1));
+		}
+		
+		// Return a random number between 0 and {n}, excluding {n}
+		function randomNumber(n) {
+			return Math.floor(Math.random() * n);
+		}
+
+		// Return a random weapon choice
+		function computerPlay() {
+			const weapons = ['rock', 'paper', 'scissors'];
+			return weapons[randomNumber(weapons.length)];
+		}
+
+		// Play a round of rock, paper, scissors
+		function playRound(playerSelection, computerSelection) {
+			let result = "lose";
+
+			playerSelection = playerSelection.toLowerCase();
+
+			switch(playerSelection) {
+				case "rock":
+					switch(computerSelection) {
+						case "rock":     result = "draw"; break;
+						case "paper":    result = "lose"; break;
+						case "scissors": result = "win";  break;
+					}
+					break;
+				case "paper":
+					switch(computerSelection) {
+						case "rock":     result = "win"; break;
+						case "paper":    result = "draw"; break;
+						case "scissors": result = "lose";  break;
+					}
+					break;
+				case "scissors":
+					switch(computerSelection) {
+						case "rock":     result = "lose"; break;
+						case "paper":    result = "win"; break;
+						case "scissors": result = "draw";  break;
+					}
+					break;
+			}
+			
+			// Generate message
+			const status = `You ${capitalize(result)}!`;
+			
+			let details = '';
+			if (result == "win") {
+				details = ` ${capitalize(playerSelection)} beats ${capitalize(computerSelection)}`;
+			} else if (result == "lose") {
+				details = ` ${capitalize(computerSelection)} beats ${capitalize(playerSelection)}`;
+			}
+
+			return status + details;
+		}
 	</script>
 </body>
 </html>
