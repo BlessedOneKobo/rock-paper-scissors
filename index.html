@@ -27,8 +27,6 @@
 		function playRound(playerSelection, computerSelection) {
 			let result = "lose";
 
-			playerSelection = playerSelection.toLowerCase();
-
 			switch(playerSelection) {
 				case "rock":
 					switch(computerSelection) {
@@ -64,7 +62,7 @@
 				if (selection && weapons.includes(selection.toLowerCase()))
 					break;
 			}
-			return selection;
+			return selection.toLowerCase();
 		}
 
 		// Update the player/computer score after each round
@@ -122,6 +120,7 @@
 			for (let i = 0; i < gameLength; i++) {
 				playerSelection = getPlayerSelection();
 				computerSelection = computerPlay();
+				
 				gameStatus = playRound(playerSelection, computerSelection);
 				
 				[playerScore, computerScore] = updateScore(gameStatus, playerScore, computerScore);
