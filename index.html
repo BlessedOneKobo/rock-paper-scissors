@@ -6,6 +6,8 @@
 </head>
 <body>
 	<script type="text/javascript">
+		const weapons = ['rock', 'paper', 'scissors'];
+		
 		// Returns a string with its first character in uppercase
 		function capitalize(str) {
 			return str && (str[0].toUpperCase() + str.slice(1));
@@ -18,7 +20,6 @@
 
 		// Return a random weapon choice
 		function computerPlay() {
-			const weapons = ['rock', 'paper', 'scissors'];
 			return weapons[randomNumber(weapons.length)];
 		}
 
@@ -51,9 +52,35 @@
 					}
 					break;
 			}
-			
-			// Generate message
-			const status = `You ${capitalize(result)}!`;
+
+			return result;
+		}
+
+		// Gets weapon choice from the user
+		function getPlayerSelection() {
+			let selection;
+			while (true) {
+				selection = prompt("Choose your weapon");
+				if (selection && weapons.includes(selection.toLowerCase()))
+					break;
+			}
+			return selection;
+		}
+
+		// Update the player/computer score after each round
+		function updateScore(roundStatus, playerScore, computerScore) {
+			if (roundStatus == "win") {
+				playerScore++;
+			} else if (roundStatus == "lose") {
+				computerScore++;
+			}
+
+			return [playerScore, computerScore];
+		}
+
+		// Display a message describing the result of the round
+		function displayRoundMessage(result, playerSelection, computerSelection) {
+			const summary = `You ${capitalize(result)}!`;
 			
 			let details = '';
 			if (result == "win") {
@@ -62,8 +89,49 @@
 				details = ` ${capitalize(computerSelection)} beats ${capitalize(playerSelection)}`;
 			}
 
-			return status + details;
+			console.log(summary + details);
 		}
+
+		// Display the final message describing the summary of the game
+		function displayFinalMessage(gameLength, playerScore, computerScore) {
+			const draws = gameLength - (playerScore + computerScore);
+
+			let message = `Player won ${playerScore}, Computer won ${computerScore}`;
+			if (draws > 0) {
+				const manyDraws = draws > 1;
+				if (manyDraws) {
+					message += `. There were ${draws} draws`;
+				} else {
+					message += `. There was one draw`;
+				}
+			}
+
+			console.log(message);
+		}
+
+		// Game loop
+		function game() {
+			const gameLength = 5;
+			
+			let gameStatus;
+			let playerSelection, computerSelection;
+			let playerScore, computerScore;
+			
+			playerScore = 0;
+			computerScore = 0;
+			for (let i = 0; i < gameLength; i++) {
+				playerSelection = getPlayerSelection();
+				computerSelection = computerPlay();
+				gameStatus = playRound(playerSelection, computerSelection);
+				
+				[playerScore, computerScore] = updateScore(gameStatus, playerScore, computerScore);
+				displayRoundMessage(gameStatus, playerSelection, computerSelection);
+			}
+
+			displayFinalMessage(gameLength, playerScore, computerScore);
+		}
+		
+		game();
 	</script>
 </body>
 </html>
