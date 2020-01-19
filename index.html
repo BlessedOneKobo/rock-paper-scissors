@@ -108,9 +108,7 @@
 		}
 
 		// Game loop
-		function game() {
-			const gameLength = 5;
-			
+		function game() {			
 			let gameStatus;
 			let playerSelection, computerSelection;
 			let playerScore, computerScore;
@@ -130,7 +128,8 @@
 			displayFinalMessage(gameLength, playerScore, computerScore);
 		}
 		
-		game();
+		const gameLength = 5;
+		game(gameLength);
 	</script>
 </body>
 </html>
