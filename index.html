@@ -2,134 +2,155 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
 	<title>Rock, Paper, Scissors</title>
+	<link href="styles.css" rel="stylesheet">
 </head>
 <body>
-	<script type="text/javascript">
-		const weapons = ['rock', 'paper', 'scissors'];
-		
-		// Returns a string with its first character in uppercase
+	<div class="container">
+		<header>
+			<h1>Rock, Paper, Scissors</h1>
+		</header>
+		<section>
+			<div class="buttonContainer">
+				<button data-selection="rock"><img src="images/iconfinder_hand-rock-o_1608372.png">Rock</button>
+				<button data-selection="paper"><img src="images/iconfinder_hand-stop-o_1608369.png">Paper</button>
+				<button data-selection="scissors"><img src="images/iconfinder_hand-peace-o_1608374.png">Scissors</button>
+			</div>
+			<div class="results">
+				<p class="scoreBoard">Player: 0, Computer: 0</p>
+				<p class="roundMessage"></p>
+				<p class="gameMessage"></p>
+			</div>
+		</section>
+	</div>
+	<script type="text/javascript">		
 		function capitalize(str) {
 			return str && (str[0].toUpperCase() + str.slice(1));
 		}
 		
-		// Return a random number between 0 and {n}, excluding {n}
 		function randomNumber(n) {
 			return Math.floor(Math.random() * n);
 		}
 
-		// Return a random weapon choice
-		function computerPlay() {
-			return weapons[randomNumber(weapons.length)];
-		}
-
-		// Play a round of rock, paper, scissors
-		function playRound(playerSelection, computerSelection) {
-			let result = "lose";
-
-			switch(playerSelection) {
-				case "rock":
-					switch(computerSelection) {
-						case "rock":     result = "draw"; break;
-						case "paper":    result = "lose"; break;
-						case "scissors": result = "win";  break;
-					}
-					break;
-				case "paper":
-					switch(computerSelection) {
-						case "rock":     result = "win"; break;
-						case "paper":    result = "draw"; break;
-						case "scissors": result = "lose";  break;
-					}
-					break;
-				case "scissors":
-					switch(computerSelection) {
-						case "rock":     result = "lose"; break;
-						case "paper":    result = "win"; break;
-						case "scissors": result = "draw";  break;
-					}
-					break;
+		function displayRoundMessage(outcome, playerWeapon, computerWeapon) {
+			let message = `You ${capitalize(outcome)}!`;
+			
+			if (outcome == "win") {
+				message += ` ${capitalize(playerWeapon)} beats ${capitalize(computerWeapon)}`;
+			} else if (outcome == "lose") {
+				message += ` ${capitalize(computerWeapon)} beats ${capitalize(playerWeapon)}`;
 			}
 
-			return result;
+			roundMessage.textContent = message;
 		}
 
-		// Gets weapon choice from the user
-		function getPlayerSelection() {
-			let selection;
-			while (true) {
-				selection = prompt("Choose your weapon");
-				if (selection && weapons.includes(selection.toLowerCase()))
-					break;
+		function resetGame(event) {
+			gameMessage.textContent = '';
+			scoreBoard.textContent = 'Player: 0, Computer: 0';
+			btnElements.forEach(btn => btn.disabled = false);
+			event.target.parentNode.removeChild(event.target);
+		}
+		
+		function displayGameMessage() {
+			let message = '';
+
+			if (playerScore > computerScore) {
+				message += "Congratulations! You're the winner";
+			} else if (playerScore < computerScore) {
+				message += "Sorry, the computer won. :(";
+			} else {
+				message += "It's a tie.";
 			}
-			return selection.toLowerCase();
-		}
 
-		// Update the player/computer score after each round
-		function updateScore(roundStatus, playerScore, computerScore) {
+			gameMessage.textContent = message;
+		}		
+		
+		function gameOver() {
+			displayGameMessage();
+			roundMessage.textContent = '';
+			playerScore = computerScore = 0;
+			btnElements.forEach(btn => btn.disabled = true);
+
+			const btnReset = document.createElement('button');
+			btnReset.classList.add('reset');
+			btnReset.textContent = 'Start Again';
+			btnReset.addEventListener('click', resetGame);
+			
+			const containerDiv = document.querySelector('.container');
+			containerDiv.appendChild(btnReset);
+		}
+		
+		function updateScore(roundStatus) {
 			if (roundStatus == "win") {
 				playerScore++;
 			} else if (roundStatus == "lose") {
 				computerScore++;
 			}
 
-			return [playerScore, computerScore];
+			scoreBoard.textContent = `Player: ${playerScore}, Computer: ${computerScore}`;
 		}
-
-		// Display a message describing the result of the round
-		function displayRoundMessage(result, playerSelection, computerSelection) {
-			const summary = `You ${capitalize(result)}!`;
+		
+		function calculateOutcome(playerSelection, computerSelection) {
+			let outcome;
 			
-			let details = '';
-			if (result == "win") {
-				details = ` ${capitalize(playerSelection)} beats ${capitalize(computerSelection)}`;
-			} else if (result == "lose") {
-				details = ` ${capitalize(computerSelection)} beats ${capitalize(playerSelection)}`;
+			switch(playerSelection) {
+				case "rock":
+					switch(computerSelection) {
+						case "rock":     outcome = "draw"; break;
+						case "paper":    outcome = "lose"; break;
+						case "scissors": outcome = "win";  break;
+					}
+					break;
+				case "paper":
+					switch(computerSelection) {
+						case "rock":     outcome = "win"; break;
+						case "paper":    outcome = "draw"; break;
+						case "scissors": outcome = "lose";  break;
+					}
+					break;
+				case "scissors":
+					switch(computerSelection) {
+						case "rock":     outcome = "lose"; break;
+						case "paper":    outcome = "win"; break;
+						case "scissors": outcome = "draw";  break;
+					}
+					break;
 			}
 
-			console.log(summary + details);
+			return outcome;
 		}
 
-		// Display the final message describing the summary of the game
-		function displayFinalMessage(gameLength, playerScore, computerScore) {
-			const draws = gameLength - (playerScore + computerScore);
-
-			let message = `Player won ${playerScore}, Computer won ${computerScore}`;
-			if (draws > 0) {
-				const manyDraws = draws > 1;
-				if (manyDraws) {
-					message += `. There were ${draws} draws`;
-				} else {
-					message += `. There was one draw`;
-				}
-			}
-
-			console.log(message);
+		function computerPlay() {
+			const weapons = ['rock', 'paper', 'scissors'];
+			return weapons[randomNumber(weapons.length)];
 		}
-
-		// Game loop
-		function game() {			
-			let gameStatus;
-			let playerSelection, computerSelection;
-			let playerScore, computerScore;
+		
+		function playRound(event) {
+			event.stopPropagation();
 			
-			playerScore = 0;
-			computerScore = 0;
-			for (let i = 0; i < gameLength; i++) {
-				playerSelection = getPlayerSelection();
-				computerSelection = computerPlay();
+			const playerSelection = this.getAttribute('data-selection');
+			const computerSelection = computerPlay();
+			const outcome = calculateOutcome(playerSelection, computerSelection);
 				
-				gameStatus = playRound(playerSelection, computerSelection);
-				
-				[playerScore, computerScore] = updateScore(gameStatus, playerScore, computerScore);
-				displayRoundMessage(gameStatus, playerSelection, computerSelection);
+			updateScore(outcome);		
+			
+			if (playerScore === gameLength || computerScore === gameLength) {
+				gameOver();
+			} else {
+				displayRoundMessage(outcome, playerSelection, computerSelection);
 			}
-
-			displayFinalMessage(gameLength, playerScore, computerScore);
 		}
 		
 		const gameLength = 5;
-		game(gameLength);
+		let gameCounter, playerScore, computerScore;
+		const btnElements = document.querySelectorAll('button[data-selection]');
+		const scoreBoard = document.querySelector('p.scoreBoard');
+		const roundMessage = document.querySelector('p.roundMessage');
+		const gameMessage = document.querySelector('p.gameMessage');
+		
+		playerScore = computerScore = 0;
+		btnElements.forEach(btn => btn.addEventListener('click', playRound));
 	</script>
 </body>
 </html>
