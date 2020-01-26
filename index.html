@@ -47,24 +47,26 @@
 
 		function resetGame(event) {
 			gameMessage.textContent = '';
-			scoreBoard.textContent = 'Player: 0, Computer: 0';
+			scoreBoard.textContent = 'Player Score: 0, Computer Score: 0';
 			btnElements.forEach(btn => btn.disabled = false);
 			event.target.parentNode.removeChild(event.target);
 		}
 		
 		function displayGameMessage() {
+			let messageColor;
 			let message = '';
 
 			if (playerScore > computerScore) {
-				message += "Congratulations! You're the winner";
+				message += "Congratulations! You're the winner.";
+				messageColor = 'green';
 			} else if (playerScore < computerScore) {
-				message += "Sorry, the computer won. :(";
-			} else {
-				message += "It's a tie.";
+				message += "Sorry, the computer won.";
+				messageColor = 'red';
 			}
 
 			gameMessage.textContent = message;
-		}		
+			gameMessage.style.color = messageColor;
+		}
 		
 		function gameOver() {
 			displayGameMessage();
@@ -88,7 +90,15 @@
 				computerScore++;
 			}
 
-			scoreBoard.textContent = `Player: ${playerScore}, Computer: ${computerScore}`;
+			if (roundStatus !== 'draw') {
+				scoreBoard.classList.add(roundStatus);
+				scoreBoard.classList.add('magnify');
+				scoreBoard.addEventListener('transitionend', event => {
+					event.target.classList.remove('magnify');
+					event.target.classList.remove(roundStatus);
+				});
+			}
+			scoreBoard.textContent = `Player Score: ${playerScore}, Computer Score: ${computerScore}`;
 		}
 		
 		function calculateOutcome(playerSelection, computerSelection) {

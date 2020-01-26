@@ -123,6 +123,17 @@ button.reset {
   height: 3.5em;
 }
 
+.magnify {
+  transform: scale(1.25);
+  transition: transform .2s;
+}
+.win {
+  color: green;
+}
+.lose {
+  color: red;
+}
+
 /* Tablets */
 @media (min-width: 481px) and (max-width: 800px) {
   h1 {
