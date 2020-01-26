@@ -66,6 +66,11 @@ header {
   margin-bottom: 1.8em;;
 }
 
+section {
+  width: 76%;
+  margin: 0 auto;
+}
+
 h1 {
   font-size: 3.8em;
   font-weight: bold;
