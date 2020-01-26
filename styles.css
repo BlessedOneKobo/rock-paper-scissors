@@ -128,7 +128,7 @@ button.reset {
 }
 
 .magnify {
-  transform: scale(1.25);
+  transform: scale(1.2);
   transition: transform .2s;
 }
 .win {
