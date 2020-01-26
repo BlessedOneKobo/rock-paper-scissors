@@ -93,6 +93,9 @@ p {
   margin-bottom: .25em;
 }
 p.scoreBoard {
+  margin-bottom: 1.5em;
+}
+.score {
   font-weight: bold;
 }
 
@@ -115,12 +118,13 @@ button.reset {
 }
 
 .buttonContainer {
-  margin-bottom: 1.8em;
+  margin-bottom: 1.5em;
 }
 
 .results {
-  margin-bottom: 1.8em;
-  height: 3.5em;
+  margin-bottom: .8em;
+  height: 2em;
+  font-weight: bold;
 }
 
 .magnify {

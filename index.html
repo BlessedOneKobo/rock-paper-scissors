@@ -12,13 +12,16 @@
 			<h1>Rock, Paper, Scissors</h1>
 		</header>
 		<section>
+			<p class="scoreBoard">
+				Player Score: <span class="score player">0</span>,
+				Computer Score: <span class="score computer">0</span>
+			</p>
 			<div class="buttonContainer">
 				<button data-selection="rock"><img src="images/iconfinder_hand-rock-o_1608372.png">Rock</button>
 				<button data-selection="paper"><img src="images/iconfinder_hand-stop-o_1608369.png">Paper</button>
 				<button data-selection="scissors"><img src="images/iconfinder_hand-peace-o_1608374.png">Scissors</button>
 			</div>
 			<div class="results">
-				<p class="scoreBoard">Player: 0, Computer: 0</p>
 				<p class="roundMessage"></p>
 				<p class="gameMessage"></p>
 			</div>
@@ -47,7 +50,8 @@
 
 		function resetGame(event) {
 			gameMessage.textContent = '';
-			scoreBoard.textContent = 'Player Score: 0, Computer Score: 0';
+			spanPlayer.textContent = '0';
+			spanComputer.textContent = '0';
 			btnElements.forEach(btn => btn.disabled = false);
 			event.target.parentNode.removeChild(event.target);
 		}
@@ -83,7 +87,7 @@
 			containerDiv.appendChild(btnReset);
 		}
 		
-		function updateScore(roundStatus) {
+		function updateScore(roundStatus) {			
 			if (roundStatus == "win") {
 				playerScore++;
 			} else if (roundStatus == "lose") {
@@ -98,7 +102,9 @@
 					event.target.classList.remove(roundStatus);
 				});
 			}
-			scoreBoard.textContent = `Player Score: ${playerScore}, Computer Score: ${computerScore}`;
+			
+			spanPlayer.textContent = playerScore;
+			spanComputer.textContent = computerScore;
 		}
 		
 		function calculateOutcome(playerSelection, computerSelection) {
@@ -156,6 +162,8 @@
 		let gameCounter, playerScore, computerScore;
 		const btnElements = document.querySelectorAll('button[data-selection]');
 		const scoreBoard = document.querySelector('p.scoreBoard');
+		const spanPlayer = document.querySelector('.player');
+		const spanComputer = document.querySelector('.computer');
 		const roundMessage = document.querySelector('p.roundMessage');
 		const gameMessage = document.querySelector('p.gameMessage');
 		
