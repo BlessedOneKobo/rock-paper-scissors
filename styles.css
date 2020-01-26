@@ -138,6 +138,10 @@ button.reset {
   color: red;
 }
 
+.disabled, .disabled:hover, .disabled:active {
+  box-shadow: none;
+}
+
 /* Tablets */
 @media (min-width: 481px) and (max-width: 800px) {
   h1 {

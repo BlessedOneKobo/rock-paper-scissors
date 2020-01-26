@@ -52,7 +52,10 @@
 			gameMessage.textContent = '';
 			spanPlayer.textContent = '0';
 			spanComputer.textContent = '0';
-			btnElements.forEach(btn => btn.disabled = false);
+			btnElements.forEach(btn => {
+				btn.disabled = false;
+				btn.classList.remove('disabled');
+			});
 			event.target.parentNode.removeChild(event.target);
 		}
 		
@@ -76,7 +79,10 @@
 			displayGameMessage();
 			roundMessage.textContent = '';
 			playerScore = computerScore = 0;
-			btnElements.forEach(btn => btn.disabled = true);
+			btnElements.forEach(btn => {
+				btn.disabled = true;
+				btn.classList.add('disabled');
+			});
 
 			const btnReset = document.createElement('button');
 			btnReset.classList.add('reset');
